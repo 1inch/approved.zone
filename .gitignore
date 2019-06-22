@@ -6,3 +6,4 @@ coverage.json
 yarn.lock
 build
 .outputParameter
+.yarn-error.log
