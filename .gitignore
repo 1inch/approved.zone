@@ -1,0 +1,8 @@
+node_modules
+.etherlime-store
+coverage
+coverage.json
+.idea
+yarn.lock
+build
+.outputParameter
