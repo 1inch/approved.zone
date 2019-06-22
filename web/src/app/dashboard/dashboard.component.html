@@ -1,3 +1,41 @@
-<p>
-  dashboard works!
-</p>
+<div class="container mt-2 mt-md-5 p-3">
+
+    <app-loading-spinner *ngIf="loading"></app-loading-spinner>
+
+    <form #f="ngForm" novalidate class="col-12 col-md-6 ml-auto mr-auto" *ngIf="!loading">
+
+        <div class="form-row">
+            <div class="form-group col-12">
+
+                <input (ngModelChange)="walletAddressChanged($event)" [(ngModel)]="walletAddress"
+                       autocomplete="off"
+                       class="form-control text-center" id="walletAddress"
+                       name="walletAddress" placeholder="Wallet Address"
+                       type="text">
+            </div>
+        </div>
+
+        <table *ngIf="approves.length" class="table">
+            <thead class="thead-light">
+            <tr>
+                <th scope="col">Smart Contract</th>
+                <th class="text-center text-md-left" scope="col" style="width: 30%;">Token</th>
+                <th class="text-center" scope="col" style="width: 30%;">Allowance</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let approve of approves">
+                <td>
+                    {{approve.name}}
+                </td>
+                <td>
+                    {{approve.token}}
+                </td>
+                <td>
+                   {{approve.allowance}}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>

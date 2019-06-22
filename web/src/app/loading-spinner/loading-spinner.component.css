@@ -25,8 +25,12 @@ h6 {
     margin-top: 20px;
 }
 
+h6 .last {
+    color: #fdc100;
+}
+
 h6 .first {
-    color: #432918;
+    color: #c53838;
 }
 
 h6 .second {

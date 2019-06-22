@@ -19,7 +19,6 @@ export class BaseComponent implements OnInit {
     loading = true;
     ensDomain;
     contractAddress;
-    walletAddress;
     copyIcon = faCopy;
     referralUrl = '';
 
@@ -39,7 +38,6 @@ export class BaseComponent implements OnInit {
         try {
 
             this.loading = false;
-            this.walletAddress = await this.ethersService.provider.getSigner().getAddress();
 
             this.ensDomain = this.configurationService.APP_ENS;
             this.contractAddress = this.configurationService.APP_SMART_CONTRACT_ADDRESS;
