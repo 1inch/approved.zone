@@ -1,0 +1,38 @@
+.loading-spinner-box {
+    width: 35%;
+    height: 35%;
+
+    min-height: 300px;
+    min-width: 150px;
+
+    padding-top: 20px;
+
+    margin: auto;
+    display: block;
+    vertical-align: middle;
+    text-align: center;
+}
+
+h6 {
+
+    font-size: 1.5rem;
+    font-family: 'Baloo Bhai', cursive;
+    font-weight: 100;
+
+    text-align: center;
+
+    color: #c6d63c;
+    margin-top: 20px;
+}
+
+h6 .first {
+    color: #432918;
+}
+
+h6 .second {
+    color: #f39200;
+}
+
+h6 .third {
+    color: #fdc100;
+}

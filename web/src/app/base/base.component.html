@@ -1,0 +1,35 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+    <button (click)="goBack()" [hidden]="!navigationService.showBackButton"
+            class="btn btn-link my-2 my-sm-0 text-dark" type="submit">
+        <fa-icon [icon]="backIcon" style="font-size: 30px;"></fa-icon>
+    </button>
+
+    <div class="ml-auto mr-auto">
+        <a class="navbar-brand text-center" routerLink="/">
+            <img alt="Approved.zone" height="70" src="assets/logo.svg">
+            <div style="font-family: 'Oswald', sans-serif; font-size: 2rem;">
+                <strong class="ml-2" style="text-transform: uppercase;">approved</strong><sup style="color: #fdc100;">.zone</sup>
+            </div>
+        </a>
+    </div>
+
+    <div class="position-absolute switch switch-md" style="right: 20px">
+        <input class="switch" id="dark-mode" type="checkbox" [ngModel]="themeService.isDarkMode" (ngModelChange)="themeService.toggleMode()">
+        <label for="dark-mode">
+            <span class="d-none d-md-block" *ngIf="themeService.isDarkMode">Dark</span>
+            <span class="d-none d-md-block" *ngIf="!themeService.isDarkMode">Light</span>
+        </label>
+    </div>
+</nav>
+
+<app-loading-spinner *ngIf="loading"></app-loading-spinner>
+<router-outlet *ngIf="!loading"></router-outlet>
+
+<div class="text-center mt-2" style="opacity: 0.3;">
+    <h5>ENS: <a href="https://etherscan.io/address/{{contractAddress}}"
+                target="_blank">{{(ensDomain ? ensDomain : 'is updating...')}}</a></h5>
+    <h6 style="font-weight: 100; font-size: 0.9rem;">BUIDL @web3hack.dev 2019 by</h6>
+    <img alt="Crypto Maniacs" src="assets/cryptomaniacs.png" width="200">
+</div>
+
