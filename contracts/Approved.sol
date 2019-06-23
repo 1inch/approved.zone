@@ -1,8 +1,10 @@
 pragma solidity ^0.5.0;
 
-import "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
 import "./SafeERC20Detailed.sol";
 
+contract SafeAllowanceIERC20 {
+    function allowance(address spender, address who) public returns(uint256);
+}
 
 contract Approved {
 
@@ -28,7 +30,7 @@ contract Approved {
 
         for (uint i = 0; i < tokens.length; i++) {
 
-            results[i] = IERC20(tokens[i]).allowance(source, spenders[i]);
+            results[i] = SafeAllowanceIERC20(tokens[i]).allowance(source, spenders[i]);
             decimals[i] = tokens[i].safeDecimals();
             symbols[i] = tokens[i].safeSymbol();
         }
