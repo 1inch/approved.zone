@@ -60,7 +60,7 @@
                 <div *ngFor="let approval of item.approvals">
                     <div *ngIf="!removedTokenTransaction[approval.tokenAddress + approval.spenderAddress]" class="row border-bottom pb-3 mb-2">
                         <div class="col-6" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
-                            <a [href]="'https://etherscan.io/address/' + approval.tokenAddress"
+                            <a [href]="'https://etherscan.io/token/' + approval.tokenAddress + '?a=' + walletAddress"
                                [title]="approval.tokenAddress" style="color: #fdc100;" target="_blank">
                                 <img
                                     [alt]="approval.symbol"

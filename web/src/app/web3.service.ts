@@ -46,16 +46,13 @@ export class Web3Service {
                 try {
 
                     if (
-                        response[i]['topics'].length === 3 &&
-                        ethers.utils.bigNumberify(response[i]['data']).gt(0)
+                        response[i]['topics'].length === 3
                     ) {
 
                         const spenderAddress = ethers.utils.getAddress(ethers.utils.hexStripZeros(response[i]['topics'][2]));
                         const tokenAddress = ethers.utils.getAddress(response[i]['address']);
-                        const allowance = ethers.utils.formatUnits(
-                            ethers.utils.bigNumberify(response[i]['data']),
-                            18
-                        );
+                        const allowanceBigNumber = ethers.utils.bigNumberify(response[i]['data']);
+                        const allowance = ethers.utils.formatUnits(allowanceBigNumber, 18);
 
                         try {
 
@@ -71,12 +68,18 @@ export class Web3Service {
                             // console.error(e);
                         }
 
-                        result[tokenAddress + spenderAddress] = {
+                        if (allowanceBigNumber.eq(0)) {
 
-                            tokenAddress: tokenAddress,
-                            spenderAddress: spenderAddress,
-                            allowance: allowance
-                        };
+                            delete result[tokenAddress + spenderAddress];
+                        } else {
+
+                            result[tokenAddress + spenderAddress] = {
+
+                                tokenAddress: tokenAddress,
+                                spenderAddress: spenderAddress,
+                                allowance: allowance,
+                            };
+                        }
                     }
                 } catch (e) {
 
@@ -95,6 +98,15 @@ export class Web3Service {
                 const tokenAddress = tokens[i];
                 const spenderAddress = spenders[i];
                 const index = tokenAddress + spenderAddress;
+
+                if (!result[index]) {
+                    return;
+                }
+
+                if (allowance.eq(0)) {
+                    delete result[index];
+                    return;
+                }
 
                 result[index]['allowance'] = allowance;
 
