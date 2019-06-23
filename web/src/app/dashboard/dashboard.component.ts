@@ -4,6 +4,7 @@ import {Web3Service} from '../web3.service';
 import {ApprovedService} from './approved.service';
 import {FormControl} from '@angular/forms';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
+import {ContractsService} from './contracts.service';
 
 @Component({
     selector: 'app-dashboard',
@@ -26,7 +27,8 @@ export class DashboardComponent implements OnInit {
     constructor(
         protected ethersService: EthersService,
         protected web3Service: Web3Service,
-        protected approvedService: ApprovedService
+        protected approvedService: ApprovedService,
+        protected contractsService: ContractsService
     ) {
     }
 
@@ -122,6 +124,20 @@ export class DashboardComponent implements OnInit {
 
                 this.decline(approval);
             });
+        });
+    }
+
+    async declineforContract(contractAddress) {
+
+        this.approves.forEach((item) => {
+
+            if (item.address.toLowerCase() === contractAddress.toLowerCase()) {
+
+                item.approvals.forEach((approval) => {
+
+                    this.decline(approval);
+                });
+            }
         });
     }
 }

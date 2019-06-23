@@ -42,7 +42,7 @@
                     <div *ngIf="hasWeb3Provider" class="col-2"
                          style="text-align: center; white-space: nowrap;overflow: hidden;text-overflow: ellipsis; font-size: 1.3rem;">
                         <button (click)="declineAll()"
-                                class="btn btn-danger btn-sm ml-1">
+                                class="btn btn-warning btn-sm ml-1">
 
                             Decline ALL
                         </button>
@@ -52,13 +52,27 @@
         </div>
         <div *ngFor="let item of approves" class="row border-bottom mb-3 pb-3">
             <div class="col-4" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis; font-size: 0.8rem;">
-                <a [href]="'https://etherscan.io/address/' + item.address" target="_blank">
+
+                <div *ngIf="contractsService.contracts[item.address]">
+                    <img [alt]="contractsService.contracts[item.address].name"
+                         [src]="contractsService.contracts[item.address].logo" width="64">
+                    <h4>{{contractsService.contracts[item.address].name}}</h4>
+                </div>
+
+                <a [href]="'https://etherscan.io/address/' + item.address" class="d-block" target="_blank">
                     {{item.address}}
                 </a>
+
+                <button (click)="declineforContract(item.address)" *ngIf="hasWeb3Provider"
+                        class="btn btn-info btn-sm ml-1 mt-3">
+
+                    Decline for contract
+                </button>
             </div>
             <div class="col-8">
                 <div *ngFor="let approval of item.approvals">
-                    <div *ngIf="!removedTokenTransaction[approval.tokenAddress + approval.spenderAddress]" class="row border-bottom pb-3 mb-2">
+                    <div *ngIf="!removedTokenTransaction[approval.tokenAddress + approval.spenderAddress]"
+                         class="row border-bottom pb-3 mb-2">
                         <div class="col-6" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
                             <a [href]="'https://etherscan.io/token/' + approval.tokenAddress + '?a=' + walletAddress"
                                [title]="approval.tokenAddress" style="color: #fdc100;" target="_blank">
@@ -86,7 +100,9 @@
                                 Decline
                             </button>
 
-                            <img alt="Loading..." class="loading-spinner" *ngIf="processTokenTransaction[approval.tokenAddress + approval.spenderAddress]" src="assets/loading.svg" style="width: 48px;">
+                            <img *ngIf="processTokenTransaction[approval.tokenAddress + approval.spenderAddress]" alt="Loading..."
+                                 class="loading-spinner"
+                                 src="assets/loading.svg" style="width: 48px;">
                         </div>
                     </div>
                 </div>

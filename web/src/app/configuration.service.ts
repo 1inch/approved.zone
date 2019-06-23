@@ -11,7 +11,7 @@ export class ConfigurationService {
     public GAS_PRICE_URL = 'https://gasprice.poa.network';
 
     public APP_ENS = 'approvedzone.eth';
-    public APP_SMART_CONTRACT_ADDRESS = '0xEC15fA2e42aa485305d688ea79013693E3349ECA';
+    public APP_SMART_CONTRACT_ADDRESS = '0x7a467e2e803bedfBbBfCB97b4eEDe2A5cDa12317';
 
     public fastGasPrice;
     public standardGasPrice;
