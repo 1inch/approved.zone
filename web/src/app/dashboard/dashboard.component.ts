@@ -18,6 +18,7 @@ export class DashboardComponent implements OnInit {
     walletAddressControl = new FormControl('');
     hasWeb3Provider = false;
     processTokenTransaction = {};
+    removedTokenTransaction = {};
     done = false;
     transactionHash = '';
     error = false;
@@ -104,7 +105,7 @@ export class DashboardComponent implements OnInit {
             this.done = true;
             this.transactionHash = tx.hash;
 
-            this.loadApproves();
+            this.removedTokenTransaction[itemIndex] = true;
         } catch (e) {
 
             this.error = true;
