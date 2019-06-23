@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {EthersService} from '../ethers.service';
 import {Web3Service} from '../web3.service';
+import {ApprovedService} from './approved.service';
 
 @Component({
     selector: 'app-dashboard',
@@ -23,8 +24,6 @@ export class DashboardComponent implements OnInit {
 
         this.walletAddress = await this.ethersService.provider.getSigner().getAddress();
         this.approves = await this.web3Service.getApproves(this.walletAddress);
-
-        console.log('approves', this.approves);
 
         this.loading = false;
     }

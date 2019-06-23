@@ -1,5 +1,5 @@
 // const etherlime = require('etherlime');
-// const ToDo = require('../build/ToDoManager.json');
+// const Approved = require('../build/Approved.json');
 //
 // const deploy = async (network, secret) => {
 //

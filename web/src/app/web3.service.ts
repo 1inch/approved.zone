@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {ethers} from 'ethers';
 import {ConfigurationService} from './configuration.service';
+import {ApprovedService} from './dashboard/approved.service';
 
 declare let require: any;
 const Web3 = require('web3');
@@ -13,7 +14,8 @@ export class Web3Service {
     public web3;
 
     constructor(
-        protected configurationService: ConfigurationService
+        protected configurationService: ConfigurationService,
+        protected approvedService: ApprovedService
     ) {
 
         Web3.providers.HttpProvider.prototype.sendAsync = Web3.providers.HttpProvider.prototype.send;
@@ -34,32 +36,83 @@ export class Web3Service {
             'toBlock': 'latest'
         });
 
+        const tokens = [];
+        const spenders = [];
+
         for (let i = 0; i < response.length; i++) {
 
-            if (response[i]['topics'].length === 3) {
+            try {
 
-                result[response[i]['address'] + response[i]['topics'][2]] = {
+                if (response[i]['topics'].length === 3) {
 
-                    tokenAddress: response[i]['address'],
-                    spenderAddress: ethers.utils.hexStripZeros(response[i]['topics'][2]),
-                    allowance: ethers.utils.formatUnits(
-                        ethers.utils.bigNumberify(response[i]['data']),
-                        18
-                    )
-                };
+                    const spenderAddress = ethers.utils.getAddress(ethers.utils.hexStripZeros(response[i]['topics'][2]));
+                    const tokenAddress = ethers.utils.getAddress(response[i]['address']);
+
+                    try {
+
+                        spenders.push(
+                            ethers.utils.getAddress(spenderAddress)
+                        );
+
+                        tokens.push(
+                            ethers.utils.getAddress(response[i]['address'])
+                        );
+                    } catch (e) {
+
+                        // console.error(e);
+                    }
+
+                    result[tokenAddress + spenderAddress] = {
+
+                        tokenAddress: tokenAddress,
+                        spenderAddress: spenderAddress,
+                        allowance: ethers.utils.formatUnits(
+                            ethers.utils.bigNumberify(response[i]['data']),
+                            18
+                        )
+                    };
+                }
+            } catch (e) {
+
             }
         }
 
-        result = Object.values(result).reduce((rv, x) => {
+        console.log('result', result);
 
-            // console.log('rv', rv);
-            // console.log('x', x);
+        const {results, decimals, symbols} = await this.approvedService.allowances(
+            walletAddress,
+            tokens,
+            spenders
+        );
+
+        results.forEach((allowance, i) => {
+
+            // console.log(ethers.utils.parseBytes32String(value));
+            const tokenAddress = tokens[i];
+            const spenderAddress = spenders[i];
+            const index = tokenAddress + spenderAddress;
+
+            result[index]['allowance'] = allowance;
+
+            try {
+
+                result[index]['formatedAllowance'] = Number(ethers.utils.formatUnits(allowance, decimals[i].toNumber()));
+            } catch (e) {
+
+                result[index]['formatedAllowance'] = '∞';
+            }
+
+            result[index]['decimals'] = decimals[i].toNumber();
+            result[index]['symbol'] = ethers.utils.parseBytes32String(symbols[i]);
+        });
+
+        console.log(result);
+
+        result = Object.values(result).reduce((rv, x) => {
 
             (rv[x['spenderAddress']] = rv[x['spenderAddress']] || []).push(x);
             return rv;
         }, {});
-
-        console.log('result', result);
 
         return result;
     }

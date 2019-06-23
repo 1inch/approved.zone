@@ -5,7 +5,7 @@
     <form #f="ngForm" *ngIf="!loading" class="col-12 col-md-8 ml-auto mr-auto mb-1" novalidate>
 
         <div class="form-row">
-            <div class="form-group col-12">
+            <div class="form-group col-8 ml-auto mr-auto">
 
                 <input (ngModelChange)="walletAddressChanged($event)" [(ngModel)]="walletAddress"
                        autocomplete="off"
@@ -16,32 +16,38 @@
         </div>
     </form>
 
-    <div class="row border-bottom mb-3 pb-3 mt-5">
-        <div class="col-4" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis; font-size: 1.3rem;">
-            Smart Contract
-        </div>
-        <div class="col-8">
-            <div class="row">
-                <div class="col-6" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis; font-size: 1.3rem;">
-                    Token Address
-                </div>
-                <div class="col-6" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis; font-size: 1.3rem;">
-                    Allowance
+    <div *ngIf="!loading">
+        <div class="row border-bottom mb-3 pb-3 mt-5">
+            <div class="col-4" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis; font-size: 1.3rem;">
+                Smart Contract
+            </div>
+            <div class="col-8">
+                <div class="row">
+                    <div class="col-6"
+                         style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis; font-size: 1.3rem;">
+                        Token
+                    </div>
+                    <div class="col-6"
+                         style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis; font-size: 1.3rem;">
+                        Allowance
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div *ngFor="let item of approves | keyvalue" class="row border-bottom mb-3 pb-3">
-        <div class="col-4" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
-            {{item.key}}
-        </div>
-        <div class="col-8">
-            <div *ngFor="let approval of item.value" class="row">
-                <div class="col-6" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
-                    {{approval.tokenAddress}}
-                </div>
-                <div class="col-6" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
-                        {{approval.allowance}}
+        <div *ngFor="let item of approves | keyvalue" class="row border-bottom mb-3 pb-3">
+            <div class="col-4" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
+                {{item.key}}
+            </div>
+            <div class="col-8">
+                <div *ngFor="let approval of item.value" class="row">
+                    <div class="col-6" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
+                        <a [href]="'https://etherscan.io/address/' + approval.tokenAddress" [title]="approval.tokenAddress" target="_blank">
+                            {{approval.symbol}}
+                        </a>
+                    </div>
+                    <div class="col-6" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
+                        {{approval.formatedAllowance}}
+                    </div>
                 </div>
             </div>
         </div>
