@@ -26,99 +26,105 @@ export class Web3Service {
 
         let result = [];
 
-        const response = await this.web3.eth.getPastLogs({
-            'address': [],
-            'topics': [
-                this.web3.utils.keccak256('Approval(address,address,uint256)'),
-                ethers.utils.hexZeroPad(walletAddress, 32)
-            ],
-            'fromBlock': 'earliest',
-            'toBlock': 'latest'
-        });
+        try {
 
-        const tokens = [];
-        const spenders = [];
+            const response = await this.web3.eth.getPastLogs({
+                'address': [],
+                'topics': [
+                    this.web3.utils.keccak256('Approval(address,address,uint256)'),
+                    ethers.utils.hexZeroPad(walletAddress, 32)
+                ],
+                'fromBlock': 'earliest',
+                'toBlock': 'latest'
+            });
 
-        for (let i = 0; i < response.length; i++) {
+            const tokens = [];
+            const spenders = [];
 
-            try {
+            for (let i = 0; i < response.length; i++) {
 
-                if (response[i]['topics'].length === 3) {
+                try {
 
-                    const spenderAddress = ethers.utils.getAddress(ethers.utils.hexStripZeros(response[i]['topics'][2]));
-                    const tokenAddress = ethers.utils.getAddress(response[i]['address']);
+                    if (response[i]['topics'].length === 3) {
 
-                    try {
+                        const spenderAddress = ethers.utils.getAddress(ethers.utils.hexStripZeros(response[i]['topics'][2]));
+                        const tokenAddress = ethers.utils.getAddress(response[i]['address']);
 
-                        spenders.push(
-                            ethers.utils.getAddress(spenderAddress)
-                        );
+                        try {
 
-                        tokens.push(
-                            ethers.utils.getAddress(response[i]['address'])
-                        );
-                    } catch (e) {
+                            spenders.push(
+                                ethers.utils.getAddress(spenderAddress)
+                            );
 
-                        // console.error(e);
+                            tokens.push(
+                                ethers.utils.getAddress(response[i]['address'])
+                            );
+                        } catch (e) {
+
+                            // console.error(e);
+                        }
+
+                        result[tokenAddress + spenderAddress] = {
+
+                            tokenAddress: tokenAddress,
+                            spenderAddress: spenderAddress,
+                            allowance: ethers.utils.formatUnits(
+                                ethers.utils.bigNumberify(response[i]['data']),
+                                18
+                            )
+                        };
                     }
+                } catch (e) {
 
-                    result[tokenAddress + spenderAddress] = {
-
-                        tokenAddress: tokenAddress,
-                        spenderAddress: spenderAddress,
-                        allowance: ethers.utils.formatUnits(
-                            ethers.utils.bigNumberify(response[i]['data']),
-                            18
-                        )
-                    };
                 }
-            } catch (e) {
-
             }
+
+            const {results, decimals, symbols} = await this.approvedService.allowances(
+                walletAddress,
+                tokens,
+                spenders
+            );
+
+            results.forEach((allowance, i) => {
+
+                // console.log(ethers.utils.parseBytes32String(value));
+                const tokenAddress = tokens[i];
+                const spenderAddress = spenders[i];
+                const index = tokenAddress + spenderAddress;
+
+                result[index]['allowance'] = allowance;
+
+                if (
+                    allowance.div(
+                        ethers.utils.bigNumberify(2).pow(254)
+                    ).gt(0)
+                ) {
+
+                    result[index]['formatedAllowance'] = '∞';
+                } else {
+
+                    result[index]['formatedAllowance'] = ethers.utils.formatUnits(allowance, decimals[i].toNumber());
+                }
+
+                result[index]['decimals'] = decimals[i].toNumber();
+                result[index]['symbol'] = ethers.utils.parseBytes32String(symbols[i]);
+            });
+
+            result = Object.values(result).reduce((rv, x) => {
+
+                (rv[x['spenderAddress']] = rv[x['spenderAddress']] || []).push(x);
+                return rv;
+            }, {});
+
+            result = Object.keys(result).map(key => {
+                return {address: key, approvals: result[key]};
+            }).sort((a, b) => {
+                return b.approvals.length - a.approvals.length;
+            });
+        } catch (e) {
+
+            console.error(e);
         }
-
-        const {results, decimals, symbols} = await this.approvedService.allowances(
-            walletAddress,
-            tokens,
-            spenders
-        );
-
-        results.forEach((allowance, i) => {
-
-            // console.log(ethers.utils.parseBytes32String(value));
-            const tokenAddress = tokens[i];
-            const spenderAddress = spenders[i];
-            const index = tokenAddress + spenderAddress;
-
-            result[index]['allowance'] = allowance;
-
-            if (
-                allowance.div(
-                    ethers.utils.bigNumberify(2).pow(254)
-                ).gt(0)
-            ) {
-
-                result[index]['formatedAllowance'] = '∞';
-            } else {
-
-                result[index]['formatedAllowance'] = ethers.utils.formatUnits(allowance, decimals[i].toNumber());
-            }
-
-            result[index]['decimals'] = decimals[i].toNumber();
-            result[index]['symbol'] = ethers.utils.parseBytes32String(symbols[i]);
-        });
-
-        result = Object.values(result).reduce((rv, x) => {
-
-            (rv[x['spenderAddress']] = rv[x['spenderAddress']] || []).push(x);
-            return rv;
-        }, {});
-
-        result = Object.keys(result).map(key => {
-            return {address: key, approvals: result[key]};
-        }).sort((a, b) => {
-            return b.approvals.length - a.approvals.length;
-        });
 
         return result;
     }

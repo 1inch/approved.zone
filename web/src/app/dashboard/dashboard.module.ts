@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {DashboardComponent} from './dashboard.component';
 import {DashboardRoutingModule} from './dashboard-routing.module';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {LoadingSpinnerModule} from '../loading-spinner/loading-spinner.module';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 
@@ -13,7 +13,8 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
         DashboardRoutingModule,
         FormsModule,
         LoadingSpinnerModule,
-        CollapseModule.forRoot()
+        CollapseModule.forRoot(),
+        ReactiveFormsModule
     ]
 })
 export class DashboardModule {

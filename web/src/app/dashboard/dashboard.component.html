@@ -7,8 +7,7 @@
         <div class="form-row">
             <div class="form-group col-8 ml-auto mr-auto">
 
-                <input (ngModelChange)="walletAddressChanged($event)" [(ngModel)]="walletAddress"
-                       autocomplete="off"
+                <input [formControl]="walletAddressControl"
                        class="form-control text-center" id="walletAddress"
                        name="walletAddress" placeholder="Ethereum Wallet Address"
                        type="text">
@@ -16,7 +15,7 @@
         </div>
     </form>
 
-    <div *ngIf="!loading">
+    <div *ngIf="!loading && walletAddress !== ''">
         <div class="row border-bottom mb-3 pb-3 mt-5">
             <div class="col-4" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis; font-size: 1.3rem;">
                 Smart Contract
@@ -51,6 +50,7 @@
                            [title]="approval.tokenAddress" style="color: #fdc100;" target="_blank">
                             <img
                                 class="mr-1"
+                                onerror="this.src = 'https://1inch.exchange/assets/tokens/token.png';"
                                 [alt]="approval.symbol"
                                 [src]="'https://1inch.exchange/assets/tokens/' + approval.tokenAddress.toLowerCase() + '.png'" width="32">
                             {{approval.symbol}}
@@ -63,7 +63,7 @@
                         {{approval.formatedAllowance}}
                     </div>
                     <div class="col-2">
-                        <button class="btn btn-danger btn-sm ml-1">Decline</button>
+                        <button class="btn btn-danger btn-sm ml-1" (click)="decline(approval)">Decline</button>
                     </div>
                 </div>
             </div>
