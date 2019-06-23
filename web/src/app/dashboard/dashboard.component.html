@@ -16,6 +16,15 @@
     </form>
 
     <div *ngIf="!loading && walletAddress !== ''">
+        <div *ngIf="done" class="alert alert-success mb-5" role="alert">
+            Token Swap transaction was successfully send.<br> <a
+            [href]="'https://etherscan.io/tx/' + transactionHash" target="_blank">{{transactionHash}}</a>
+        </div>
+
+        <div *ngIf="error" class="alert alert-danger mb-5" role="alert">
+            An error is occured. Please try again later or contact us.
+        </div>
+
         <div class="row border-bottom mb-3 pb-3 mt-5">
             <div class="col-4" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis; font-size: 1.3rem;">
                 Smart Contract

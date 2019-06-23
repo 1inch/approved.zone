@@ -108,18 +108,12 @@ export class ApprovedService {
         spenderAddress: string
     ) {
 
-        try {
+        const token = new ethers.Contract(
+            tokenAddress,
+            ERC20ABI,
+            this.signer
+        );
 
-            const token = new ethers.Contract(
-                tokenAddress,
-                ERC20ABI,
-                this.signer
-            );
-
-            await token.approve(spenderAddress, ethers.utils.bigNumberify(0));
-        } catch (e) {
-
-            alert(e);
-        }
+        return token.approve(spenderAddress, ethers.utils.bigNumberify(0));
     }
 }
