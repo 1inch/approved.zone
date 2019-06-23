@@ -16,6 +16,7 @@ export class DashboardComponent implements OnInit {
     approves: any;
     loading = true;
     walletAddressControl = new FormControl('');
+    hasWeb3Provider = false;
 
     constructor(
         protected ethersService: EthersService,
@@ -25,6 +26,14 @@ export class DashboardComponent implements OnInit {
     }
 
     async ngOnInit() {
+
+        if (
+            this.ethersService.provider.getSigner &&
+            this.ethersService.provider.getSigner().getAddress
+        ) {
+
+            this.hasWeb3Provider = true;
+        }
 
         this.walletAddressControl.valueChanges.pipe(
             debounceTime(100),
