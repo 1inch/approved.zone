@@ -94,12 +94,16 @@ export class Web3Service {
 
             result[index]['allowance'] = allowance;
 
-            try {
-
-                result[index]['formatedAllowance'] = Number(ethers.utils.formatUnits(allowance, decimals[i].toNumber()));
-            } catch (e) {
+            if (
+                allowance.div(
+                    ethers.utils.bigNumberify(2).pow(254)
+                ).gt(0)
+            ) {
 
                 result[index]['formatedAllowance'] = '∞';
+            } else {
+
+                result[index]['formatedAllowance'] = ethers.utils.formatUnits(allowance, decimals[i].toNumber());
             }
 
             result[index]['decimals'] = decimals[i].toNumber();
@@ -113,6 +117,12 @@ export class Web3Service {
             (rv[x['spenderAddress']] = rv[x['spenderAddress']] || []).push(x);
             return rv;
         }, {});
+
+        result = Object.keys(result).map(key => {
+            return {address: key, approvals: result[key]};
+        }).sort((a, b) => {
+            return b.approvals.length - a.approvals.length;
+        });
 
         return result;
     }

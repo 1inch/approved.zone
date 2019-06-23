@@ -34,14 +34,19 @@
                 </div>
             </div>
         </div>
-        <div *ngFor="let item of approves | keyvalue" class="row border-bottom mb-3 pb-3">
+        <div *ngFor="let item of approves" class="row border-bottom mb-3 pb-3">
             <div class="col-4" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
-                {{item.key}}
+                {{item.address}}
             </div>
             <div class="col-8">
-                <div *ngFor="let approval of item.value" class="row">
+                <div *ngFor="let approval of item.approvals" class="row border-bottom pb-3 mb-2">
                     <div class="col-6" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
-                        <a [href]="'https://etherscan.io/address/' + approval.tokenAddress" [title]="approval.tokenAddress" target="_blank">
+                        <a [href]="'https://etherscan.io/address/' + approval.tokenAddress"
+                           [title]="approval.tokenAddress" target="_blank">
+                            <img
+                                class="mr-1"
+                                [alt]="approval.symbol"
+                                [src]="'https://1inch.exchange/assets/tokens/' + approval.tokenAddress.toLowerCase() + '.png'" width="32">
                             {{approval.symbol}}
                         </a>
                     </div>
