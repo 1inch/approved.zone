@@ -70,9 +70,6 @@ export class ApprovedService {
         spenders: string[]
     ) {
 
-        // console.log('spenders', spenders);
-        // console.log('tokens', tokens);
-
         return this.contract.allowances(
             ethers.utils.getAddress(source),
             tokens,

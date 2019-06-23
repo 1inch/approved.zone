@@ -77,8 +77,6 @@ export class Web3Service {
             }
         }
 
-        console.log('result', result);
-
         const {results, decimals, symbols} = await this.approvedService.allowances(
             walletAddress,
             tokens,
@@ -109,8 +107,6 @@ export class Web3Service {
             result[index]['decimals'] = decimals[i].toNumber();
             result[index]['symbol'] = ethers.utils.parseBytes32String(symbols[i]);
         });
-
-        console.log(result);
 
         result = Object.values(result).reduce((rv, x) => {
 

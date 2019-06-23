@@ -1,4 +1,14 @@
 
+a {
+    color: #c53838;
+}
+
+a:hover,
+a:active,
+a:focus {
+    color: #fdc100;
+}
+
 .dark-mode {
 
     color: #ddd !important;

@@ -27,31 +27,43 @@
                          style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis; font-size: 1.3rem;">
                         Token
                     </div>
-                    <div class="col-6"
+                    <div class="col-4"
                          style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis; font-size: 1.3rem;">
                         Allowance
+                    </div>
+                    <div class="col-2"
+                         style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis; font-size: 1.3rem;">
+                        Action
                     </div>
                 </div>
             </div>
         </div>
         <div *ngFor="let item of approves" class="row border-bottom mb-3 pb-3">
-            <div class="col-4" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
-                {{item.address}}
+            <div class="col-4" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis; font-size: 0.8rem;">
+                <a [href]="'https://etherscan.io/address/' + item.address" target="_blank">
+                    {{item.address}}
+                </a>
             </div>
             <div class="col-8">
                 <div *ngFor="let approval of item.approvals" class="row border-bottom pb-3 mb-2">
                     <div class="col-6" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
                         <a [href]="'https://etherscan.io/address/' + approval.tokenAddress"
-                           [title]="approval.tokenAddress" target="_blank">
+                           [title]="approval.tokenAddress" style="color: #fdc100;" target="_blank">
                             <img
                                 class="mr-1"
                                 [alt]="approval.symbol"
                                 [src]="'https://1inch.exchange/assets/tokens/' + approval.tokenAddress.toLowerCase() + '.png'" width="32">
                             {{approval.symbol}}
                         </a>
+                        <div class="text-secondary mt-2" style="font-size: 0.8rem;">
+                            {{approval.tokenAddress}}
+                        </div>
                     </div>
-                    <div class="col-6" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
+                    <div class="col-4" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
                         {{approval.formatedAllowance}}
+                    </div>
+                    <div class="col-2">
+                        <button class="btn btn-danger btn-sm ml-1">Decline</button>
                     </div>
                 </div>
             </div>
