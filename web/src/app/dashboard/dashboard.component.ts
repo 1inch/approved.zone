@@ -113,4 +113,15 @@ export class DashboardComponent implements OnInit {
 
         this.processTokenTransaction[itemIndex] = false;
     }
+
+    async declineAll() {
+
+        this.approves.forEach((item) => {
+
+            item.approvals.forEach((approval) => {
+
+                this.decline(approval);
+            });
+        });
+    }
 }
