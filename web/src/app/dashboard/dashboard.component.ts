@@ -66,11 +66,12 @@ export class DashboardComponent implements OnInit {
 
         try {
 
+            this.ownWalletAddress = await this.ethersService.provider.getSigner().getAddress();
+            
             this.walletAddressControl.setValue(
                 await this.ethersService.provider.getSigner().getAddress()
             );
 
-            this.ownWalletAddress = await this.ethersService.provider.getSigner().getAddress();
         } catch (e) {
 
             if (localStorage.getItem('walletAddress')) {
