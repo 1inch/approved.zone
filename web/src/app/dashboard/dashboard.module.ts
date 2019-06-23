@@ -4,6 +4,7 @@ import {DashboardComponent} from './dashboard.component';
 import {DashboardRoutingModule} from './dashboard-routing.module';
 import {FormsModule} from '@angular/forms';
 import {LoadingSpinnerModule} from '../loading-spinner/loading-spinner.module';
+import { CollapseModule } from 'ngx-bootstrap/collapse';
 
 @NgModule({
     declarations: [DashboardComponent],
@@ -11,7 +12,8 @@ import {LoadingSpinnerModule} from '../loading-spinner/loading-spinner.module';
         CommonModule,
         DashboardRoutingModule,
         FormsModule,
-        LoadingSpinnerModule
+        LoadingSpinnerModule,
+        CollapseModule.forRoot()
     ]
 })
 export class DashboardModule {
