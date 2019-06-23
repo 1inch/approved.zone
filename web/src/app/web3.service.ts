@@ -61,6 +61,14 @@ export class Web3Service {
 
         console.log('result', result);
 
+        result = Object.keys(result).map(key => {
+            return { address: key, approvals: result[key] };
+        }).sort((a, b) => {
+            return b.approvals.length - a.approvals.length;
+        });
+
+        console.log('result', result);
+
         return result;
     }
 }
