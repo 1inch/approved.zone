@@ -9,6 +9,7 @@ import {BaseComponent} from './base/base.component';
 import {LoadingSpinnerModule} from './loading-spinner/loading-spinner.module';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {NoContentComponent} from './no-content/no-content.component';
+import {APP_BASE_HREF} from '@angular/common';
 
 @NgModule({
     declarations: [
@@ -24,7 +25,12 @@ import {NoContentComponent} from './no-content/no-content.component';
         FontAwesomeModule,
         LoadingSpinnerModule
     ],
-    providers: [],
+    providers: [
+        {
+            provide: APP_BASE_HREF,
+            useValue: '/' + (window.location.pathname.split('/')[1] || '')
+        }
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule {
