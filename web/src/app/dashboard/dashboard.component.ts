@@ -67,7 +67,7 @@ export class DashboardComponent implements OnInit {
         try {
 
             this.ownWalletAddress = await this.ethersService.provider.getSigner().getAddress();
-            
+
             this.walletAddressControl.setValue(
                 await this.ethersService.provider.getSigner().getAddress()
             );
