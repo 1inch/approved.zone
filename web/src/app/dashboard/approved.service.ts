@@ -41,6 +41,32 @@ const ApprovedABI = [
     }
 ];
 
+const ERC20ABI = [
+    {
+        'constant': false,
+        'inputs': [
+            {
+                'name': '_spender',
+                'type': 'address'
+            },
+            {
+                'name': '_value',
+                'type': 'uint256'
+            }
+        ],
+        'name': 'approve',
+        'outputs': [
+            {
+                'name': '',
+                'type': 'bool'
+            }
+        ],
+        'payable': false,
+        'stateMutability': 'nonpayable',
+        'type': 'function'
+    }
+];
+
 @Injectable({
     providedIn: 'root'
 })
@@ -75,5 +101,25 @@ export class ApprovedService {
             tokens,
             spenders
         );
+    }
+
+    async decline(
+        tokenAddress: string,
+        spenderAddress: string
+    ) {
+
+        try {
+
+            const token = new ethers.Contract(
+                tokenAddress,
+                ERC20ABI,
+                this.signer
+            );
+
+            await token.approve(spenderAddress, ethers.utils.bigNumberify(0));
+        } catch (e) {
+
+            alert(e);
+        }
     }
 }

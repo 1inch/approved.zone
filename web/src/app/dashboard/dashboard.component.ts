@@ -17,6 +17,7 @@ export class DashboardComponent implements OnInit {
     loading = true;
     walletAddressControl = new FormControl('');
     hasWeb3Provider = false;
+    processTokenTransaction = {};
 
     constructor(
         protected ethersService: EthersService,
@@ -80,9 +81,18 @@ export class DashboardComponent implements OnInit {
 
     async decline(approval) {
 
-        console.log('approval', approval);
-        // this.approvedService.decline(
-        //  approval.tokenAddress
-        // );
+        const itemIndex = approval.tokenAddress + approval.spenderAddress;
+
+        this.processTokenTransaction[itemIndex] = true;
+
+        console.log('index', itemIndex);
+        console.log('loading', this.processTokenTransaction[itemIndex]);
+
+        await this.approvedService.decline(
+            approval.tokenAddress,
+            approval.spenderAddress
+        );
+
+        this.processTokenTransaction[itemIndex] = false;
     }
 }

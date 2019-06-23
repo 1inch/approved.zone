@@ -26,11 +26,11 @@
                          style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis; font-size: 1.3rem;">
                         Token
                     </div>
-                    <div class="col-4" [className]="!hasWeb3Provider ? 'col-6' : 'col-4'"
+                    <div [className]="!hasWeb3Provider ? 'col-6' : 'col-4'" class="col-4"
                          style="text-align: center; white-space: nowrap;overflow: hidden;text-overflow: ellipsis; font-size: 1.3rem;">
                         Allowance
                     </div>
-                    <div class="col-2" *ngIf="hasWeb3Provider"
+                    <div *ngIf="hasWeb3Provider" class="col-2"
                          style="text-align: center; white-space: nowrap;overflow: hidden;text-overflow: ellipsis; font-size: 1.3rem;">
                         Action
                     </div>
@@ -44,29 +44,37 @@
                 </a>
             </div>
             <div class="col-8">
-                <div *ngFor="let approval of item.approvals" class="row border-bottom pb-3 mb-2">
-                    <div class="col-6" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
-                        <a [href]="'https://etherscan.io/address/' + approval.tokenAddress"
-                           [title]="approval.tokenAddress" style="color: #fdc100;" target="_blank">
-                            <img
-                                [alt]="approval.symbol"
-                                [src]="'https://1inch.exchange/assets/tokens/' + approval.tokenAddress.toLowerCase() + '.png'"
-                                class="mr-1"
-                                onerror="this.src = 'https://1inch.exchange/assets/tokens/token.png';"
-                                width="32">
-                            {{approval.symbol}}
-                        </a>
-                        <div class="text-secondary mt-2" style="font-size: 0.8rem;">
-                            {{approval.tokenAddress}}
+                <div *ngFor="let approval of item.approvals">
+                    <div *ngIf="approval.allowance.gt(0)" class="row border-bottom pb-3 mb-2">
+                        <div class="col-6" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
+                            <a [href]="'https://etherscan.io/address/' + approval.tokenAddress"
+                               [title]="approval.tokenAddress" style="color: #fdc100;" target="_blank">
+                                <img
+                                    [alt]="approval.symbol"
+                                    [src]="'https://1inch.exchange/assets/tokens/' + approval.tokenAddress.toLowerCase() + '.png'"
+                                    class="mr-1"
+                                    onerror="this.src = 'https://1inch.exchange/assets/tokens/token.png';"
+                                    width="32">
+                                {{approval.symbol}}
+                            </a>
+                            <div class="text-secondary mt-2" style="font-size: 0.8rem;">
+                                {{approval.tokenAddress}}
+                            </div>
                         </div>
-                    </div>
-                    <div [className]="!hasWeb3Provider ? 'col-6' : 'col-4'" style="text-align: center; white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
-                        {{approval.formatedAllowance}}
-                    </div>
-                    <div class="col-2" *ngIf="hasWeb3Provider" style="text-align: center;">
-                        <button (click)="decline(approval)" *ngIf="hasWeb3Provider" class="btn btn-danger btn-sm ml-1">
-                            Decline
-                        </button>
+                        <div [className]="!hasWeb3Provider ? 'col-6' : 'col-4'"
+                             style="text-align: center; white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
+                            {{approval.formatedAllowance}}
+                        </div>
+                        <div *ngIf="hasWeb3Provider" class="col-2" style="text-align: center;">
+                            <button (click)="decline(approval)"
+                                    *ngIf="!processTokenTransaction[approval.tokenAddress + approval.spenderAddress]"
+                                    class="btn btn-danger btn-sm ml-1">
+
+                                Decline
+                            </button>
+
+                            <img alt="Loading..." class="loading-spinner" *ngIf="processTokenTransaction[approval.tokenAddress + approval.spenderAddress]" src="assets/loading.svg" style="width: 48px;">
+                        </div>
                     </div>
                 </div>
             </div>

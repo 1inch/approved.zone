@@ -45,10 +45,17 @@ export class Web3Service {
 
                 try {
 
-                    if (response[i]['topics'].length === 3) {
+                    if (
+                        response[i]['topics'].length === 3 &&
+                        ethers.utils.bigNumberify(response[i]['data']).gt(0)
+                    ) {
 
                         const spenderAddress = ethers.utils.getAddress(ethers.utils.hexStripZeros(response[i]['topics'][2]));
                         const tokenAddress = ethers.utils.getAddress(response[i]['address']);
+                        const allowance = ethers.utils.formatUnits(
+                            ethers.utils.bigNumberify(response[i]['data']),
+                            18
+                        );
 
                         try {
 
@@ -68,10 +75,7 @@ export class Web3Service {
 
                             tokenAddress: tokenAddress,
                             spenderAddress: spenderAddress,
-                            allowance: ethers.utils.formatUnits(
-                                ethers.utils.bigNumberify(response[i]['data']),
-                                18
-                            )
+                            allowance: allowance
                         };
                     }
                 } catch (e) {
