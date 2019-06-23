@@ -10,7 +10,7 @@
                 <input [formControl]="walletAddressControl"
                        class="form-control text-center" id="walletAddress"
                        name="walletAddress" placeholder="Ethereum Wallet Address"
-                       type="text">
+                       type="search">
             </div>
         </div>
     </form>
@@ -90,7 +90,14 @@
                         </div>
                         <div [className]="!hasWeb3Provider ? 'col-6' : 'col-4'"
                              style="text-align: center; white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
-                            {{approval.formatedAllowance}}
+
+                            <div *ngIf="approval.formatedAllowance === '∞'">
+                                <img src="assets/infinity.png" width="48">
+                            </div>
+
+                            <div *ngIf="approval.formatedAllowance !== '∞'">
+                                {{approval.formatedAllowance}}
+                            </div>
                         </div>
                         <div *ngIf="hasWeb3Provider" class="col-2" style="text-align: center;">
                             <button (click)="decline(approval)"

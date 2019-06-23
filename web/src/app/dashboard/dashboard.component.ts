@@ -14,6 +14,7 @@ import {ContractsService} from './contracts.service';
 export class DashboardComponent implements OnInit {
 
     walletAddress = '';
+    ownWalletAddress = '';
     approves: any;
     loading = true;
     walletAddressControl = new FormControl('');
@@ -50,6 +51,14 @@ export class DashboardComponent implements OnInit {
 
                 this.walletAddress = value;
 
+                if (value !== this.ownWalletAddress) {
+
+                    this.hasWeb3Provider = false;
+                } else {
+
+                    this.hasWeb3Provider = true;
+                }
+
                 localStorage.setItem('walletAddress', value);
 
                 await this.loadApproves();
@@ -60,6 +69,8 @@ export class DashboardComponent implements OnInit {
             this.walletAddressControl.setValue(
                 await this.ethersService.provider.getSigner().getAddress()
             );
+
+            this.ownWalletAddress = await this.ethersService.provider.getSigner().getAddress();
         } catch (e) {
 
             if (localStorage.getItem('walletAddress')) {
