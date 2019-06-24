@@ -49,9 +49,9 @@ export class DashboardComponent implements OnInit {
         )
             .subscribe(async (value) => {
 
-                this.walletAddress = value;
+                this.walletAddress = value.trim();
 
-                if (value !== this.ownWalletAddress) {
+                if (this.walletAddress !== this.ownWalletAddress) {
 
                     this.hasWeb3Provider = false;
                 } else {
@@ -59,7 +59,7 @@ export class DashboardComponent implements OnInit {
                     this.hasWeb3Provider = true;
                 }
 
-                localStorage.setItem('walletAddress', value);
+                localStorage.setItem('walletAddress', this.walletAddress);
 
                 await this.loadApproves();
             });
