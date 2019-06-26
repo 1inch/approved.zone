@@ -44,6 +44,10 @@ export class ContractsService {
             name: 'Bancor Network',
             logo: 'https://1inch.exchange/assets/bancor-network.png'
         },
+        '0x587044b74004E3D5eF2D453b7F8d198d9e4cB558': {
+            name: 'Bancor Network',
+            logo: 'https://1inch.exchange/assets/bancor-network.png'
+        },
     };
 
     constructor() {
