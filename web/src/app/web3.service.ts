@@ -19,7 +19,7 @@ export class Web3Service {
     ) {
 
         Web3.providers.HttpProvider.prototype.sendAsync = Web3.providers.HttpProvider.prototype.send;
-        this.web3 = new Web3(new Web3.providers.HttpProvider('https://parity.1inch.exchange/rpc'));
+        this.web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/' + configurationService.INFURA_KEY));
     }
 
     async getApproves(walletAddress: string) {
